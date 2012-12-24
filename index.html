@@ -1,17 +1,47 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="カンマ区切りの緯度経度情報をもとに地図上にピンを立てるシンプルなサービスです">
+    <title>SpotMapper</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
+    <style>
+      html,body { height:100%; }
+      .navbar { margin:0; }
+      .desc { text-align:right }
+      .container-fluid { padding:0 }
+      #pins { height: 100%; width: 100%; margin:0; padding:0;}
+      #map { height:100%; min-height:100%; width:100%; margin:0}
+      .map { height:100%; margin:0; }
+      .row-fluid .span2{ margin:0; padding:0; width: 17%}
+      .sidebar { margin:0; text-align:right; height:100%; width: 100%; padding:0}
+    </style>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-25857434-1']);
+      _gaq.push(['_setDomainName', 'ikmz.net']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
+    </script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=i8lk2wWxg65phhAawCwoRkW990Ya0QMBxmkTZaEIbaOFfym0fwVUwI.QtgO1Pw--"></script>
     <script type="text/javascript">
       var ymap;
       var markers = new Array();
+      $(window).resize(function() {
+        var csize = $(window).outerHeight(true) - $("#navbar").outerHeight(true);
+        $("#map").height(csize);
+        $("#pins").height(csize - $("#redraw").outerHeight(true) - 2);
+      });
       window.onload = function(){
-        $("#pins").keyup(function(){
+        $(window).resize();
+        $("#redraw").click(function(){
           // markerを消す
           for(var i=0,length=markers.length;i<length;i++){
             ymap.removeFeature(markers[i]);
@@ -37,39 +67,37 @@
         });
         ymap.addControl(new Y.LayerSetControl());
         ymap.addControl(new Y.SliderZoomControlVertical());
-        ymap.drawMap(new Y.LatLng(35.66572, 139.73100), 8, Y.LayerSetId.NORMAL);
+        ymap.drawMap(new Y.LatLng(35.66572, 139.73100), 5, Y.LayerSetId.NORMAL);
       };
-</script>
-<div class="navbar">
-  <div class="navbar-inner">
-    <a class="brand" href="#">SpotMapper</a>
-    <!--
-    <ul class="nav">
-      <li class="active"><a href="#">Home</a></li>
-    </ul>
-    -->
-  </div>
-</div>
-
-<ul class="nav">
-</ul>
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span9">
-      <!--Body content-->
-      <div id="map" style="width:100%; height:600px"></div>
-    </div>
-    <div class="span3">
-      <!--Sidebar content-->
-      <div>
-        <h2>SpotMapperとは？</h2>
-        CSV形式の複数の緯度経度情報をもとに地図上にピンを立てるシンプルなサービスです．
-        <h2>使い方</h2>
-        下のボックスに "緯度,経度" 形式の情報を入力してください．
+    </script>
+  </head>
+  <body>
+    <div id="navbar" class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="#">SpotMapper</a>
+        <!--
+        <ul class="nav">
+          <li class="active"><a href="#">Home</a></li>
+        </ul>
+        -->
+        <div class="desc">
+          <p>カンマ区切りの緯度経度情報をもとに地図上にピンを立てるシンプルなサービスです．ご意見，ご要望は <a href="http://twitter.com/isseium">@isseium</a> まで
+          </p>
+        </div>
       </div>
-      <textarea id="pins" rows="10" style="width:100%">35.64997652994234,139.72116702175174</textarea>
     </div>
-  </div>
-</div>
-</body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span10">
+          <!--Body content-->
+          <div id="map"></div>
+        </div>
+        <div class="span2 sidebar">
+          <!--Sidebar content-->
+          <textarea id="pins" placeholder="「緯度,経度」形式で入力してください"></textarea>
+          <button id="redraw" class="btn btn-large btn-primary" type="button">Redraw</button>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
