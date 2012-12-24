@@ -37,11 +37,11 @@
       $(window).resize(function() {
         var csize = $(window).outerHeight(true) - $("#navbar").outerHeight(true);
         $("#map").height(csize);
-        $("#pins").height(csize - $("#redraw").outerHeight(true) - 2);
+        $("#pins").height(csize - $("#draw").outerHeight(true) - 2);
       });
       window.onload = function(){
         $(window).resize();
-        $("#redraw").click(function(){
+        $("#draw").click(function(){
           // markerを消す
           for(var i=0,length=markers.length;i<length;i++){
             ymap.removeFeature(markers[i]);
@@ -68,6 +68,8 @@
         ymap.addControl(new Y.LayerSetControl());
         ymap.addControl(new Y.SliderZoomControlVertical());
         ymap.drawMap(new Y.LatLng(35.66572, 139.73100), 5, Y.LayerSetId.NORMAL);
+        $("#pins").val("39.7035305,141.1526673\n35.66572,139.73100");
+        $("#draw").click();
       };
     </script>
   </head>
@@ -95,7 +97,7 @@
         <div class="span2 sidebar">
           <!--Sidebar content-->
           <textarea id="pins" placeholder="「緯度,経度」形式で入力してください"></textarea>
-          <button id="redraw" class="btn btn-large btn-primary" type="button">Redraw</button>
+          <button id="draw" class="btn btn-large btn-primary" type="button">draw</button>
         </div>
       </div>
     </div>
